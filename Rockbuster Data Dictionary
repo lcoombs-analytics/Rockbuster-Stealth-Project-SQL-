@@ -1,0 +1,195 @@
+# TABLE OF CONTENTS
+
+
+Entity Relationship Database Schema………………………………………………………………………………………………………………………………….3
+Data Dictionary
+	Fact Tables
+		Payment……………………………………………………………………………………………………………………………………………………….4
+		Rental…………………………………………………………………………………………………………………………………………………………..4
+	Dimension Tables	
+		Store…………………………………………………………………………………………………………………………………………………………….4
+Film Actor………………………………………………………………………………………………………………………………………………………5
+Inventory……………………………………………………………………………………………………………………………………………………….5
+Film Category…………………………………………………………………………………………………………………………………………………5
+Customer………………………………………………………………………………………………………………………………………………………6
+Staff……………………………………………………………………………………………………………………………………………………………..6
+Actor…………………………………………………………………………………………………………………………………………………………….7
+Film………………………………………………………………………………………………………………………………………………………………7
+Category……………………………………………………………………………………………………………………………………………………….7
+Language………………………………………………………………………………………………………………………………………………………8
+Address………………………………………………………………………………………………………………………………………………………..8
+City………………………………………………………………………………………………………………………………………………………………8
+Country………………………………………………………………………………………………………………………………………………………..8
+
+
+Entity Relationship Database – DBVisualizer
+**Snowflake Schema**
+ 
+
+ 
+
+
+
+
+
+Data Dictionary
+FACT TABLES
+Payment					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+payment_id	SERIAL	identifying the transaction number	 	 	Primary
+customer_id	SMALLINT	identifying customer, linked to the customer table	customer.customer_id	 	Foreign
+staff_id	SMALLINT	identifying staff member, linked to the staff table	staff.staff_id	 	Foreign
+rental_id	INTEGER	identifying the film rented	rental.rental_id	 	Foreign
+amount	NUMERIC (5,2)	identifying cost of rental	 	 	 
+payment_date	TIMESTAMP(6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+Rental					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+rental_id	SERIAL	identifying line item	 	 	Pirmary
+rental_date	TIMESTAMP(6) WITHOUT TIME ZONE	identifying the date and time film was rented without the time zone	 	 	 
+inventory_id	INTEGER	identifying inventory number for the film rented, linked to the inventory table	inventory.inventory_id	 	Foreign
+customer_id	SMALLINT	identifying customer, linked to the customer table	customer.customer_id	 	Foreign
+return_date	TIMESTAMP(6) WITHOUT TIME ZONE	identifying the date and time rental was returned without the time zone	 	 	 
+staff_id	SMALLINT	identifying staff member, linked to the staff table	staff.staff_id	 	Foreign
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+DIMENSION TABLES
+Store					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+store_id	SERIAL	identifying number of stores	 	 	Primary
+manager_staff_id	SMALLINT	identifying the manager	staff.staff_id	 	Foreign
+address_id	SMALLINT	identifying the store address or location	address.address_id	 	Foreign
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+
+
+Film Actor					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+actor_id	SMALLINT	identifying where the name of the actor appears on the list	actor.actor_id	 	Primary
+film_id	SMALLINT	identifying the film name	film.film_id	 	Foreign
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+Inventory					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+inventory_id	SERIAL	identifying inventory number for the film rented	 	rental.inventory_id	Primary
+film_id	SMALLINT	identifying the film name	film.film_id	 	Foreign
+store_id	SMALLINT	identifying number of stores	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+Film Category					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+film_id	SMALLINT	identifying where the name of the film is on the list	film.film_id	 	Primary
+category_id	SMALLINT	identifying what category film was rented from	category.category_id	 	Foreign
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Customer					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+customer_id	SERIAL	identifying line item where name of customer appears on the list	 	rental.customer_id	Primary
+store_id	SMALLINT	identifying number of stores	 	 	 
+first_name	CHARACTER VARYING (45)	identifying first name of customer, up to 45 characters	 	 	 
+last_name	CHARACTER VARYING (45)	identifying first name of customer, up to 45 characters	 	 	 
+email	CHARACTER VARYING (50)	identifying email of customer, up to 50 characters	 	 	 
+address_id	SMALLINT	identifying address of customer	address.address_id	 	Foreign
+activebool	BOOLEAN	identifying whether or not this customer is active (True or False)	 	 	 
+create_date	DATE	identifying when customer file was created	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+active	INTEGER	identifies whether or not customer is active	 	 	 
+					
+Staff					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+staff_id	SERIAL	identifying staff member	 	payment.staff_id	Primary
+first_name	CHARACTER VARYING (45)	identifying first name of staff member	 	 	 
+last_name	CHARACTER VARYING (45)	identifying last name of staff member	 	 	 
+address_id	SMALLINT	identifying address of staff member	address.address_id	 	 
+email	CHARACTER VARYING (50)	identifying email of staff member	 	 	 
+store_id	SMALLINT	identifying number of stores	 	 	 
+active	BOOLEAN	identifying whether or not this staff member is active (True or False)	 	 	 
+username	CHARACTER VARYING (16)	staff member's username	 	 	 
+password	CHARACTER VARYING (40)	staff member's password	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+picture	BYTEA	identifying whether or not this staff member has a photo on file (Binary Data or Null)	 	 	 
+					
+
+
+
+
+
+
+Actor					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+actor_id	SERIAL	identifying line item where name of actor appears on the list	 	film_actor.actor_id	Primary
+first_name	CHARACTER VARYING (45)	identifying first name of actor	 	 	 
+last_name	CHARACTER VARYING (45)	identifying last name of actor	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+Film					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+film_id	SERIAL	identifying line number where film title appears	 	inventory.film_id	Primary
+title	CHARACTER VARYING (255)	identifying name of film within 255 characters	 	 	 
+description	TEXT	short description of plot of film	 	 	 
+release_year	YEAR	year film was released to the public	 	 	 
+language_id	SMALLINT	identifying number for the language filmed in; link to the language table	language.language_id	 	Foreign
+rental_duration	SMALLINT	how long this film was rented for	 	 	 
+rental_rate	NUMERIC (4,2)	cost of rental per day	 	 	 
+length	SMALLINT	running time of film	 	 	 
+replacement_cost	NUMERIC (5,2)	cost to replace film if damaged or lost	 	 	 
+rating	MPAA_RATING	Suggested viewer rating provided by the Motion Picture Association of America	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+speacial_features	TEXT	lists the special features on the DVD	 	 	 
+fulltext	TSVECTOR	alphabetical list of words that perhaps describe this film	 	 	 
+					
+Category					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+categroy_id	SERIAL	identifying line number where category appears	 	film_category.category_id	Primary
+name	CHARACTER VARYING (25)	describes the genre of the film	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+
+
+
+Language					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+language_id	SERIAL	identifying line number where the language appears	 	film.language_id	Primary
+name	CHARACTER VARYING (20)	lists the language the film was shot in, in 20 characters or less	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+Address					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+address_id	SERIAL	identifying line number where address appears	 	store.address_id	Primary
+address	CHARACTER VARYING (50)	actual street address with number, up to 50 characters	 	 	 
+address2	CHARACTER VARYING (50)	actual street address with number, up to 50 characters	 	 	 
+district	CHARACTER VARYING (25)	state or country, up to 20 characters	 	 	 
+city_id	SMALLINT	identifying the city in the city table	city.city_id	 	Foreign
+postal_code	CHARACTER VARYING (10)	zip or postal code up to 10 characters	 	 	 
+phone	CHARACTER VARYING (20)	phone number up to 20 characters	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+
+
+City					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+city_id	SERIAL	identifying line where city appears on list	 	address.city_id	Primary
+city	CHARACTER VARYING (50)	name of city, up to 50 characters	 	 	 
+country_id	SMALLINT	identifier where city appears on the city table	country.country_id	 	Foreign
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
+					
+Country					
+Columns 	Data Type	Description	Columns linked to	Columns linked from	Unique Key
+country_id	SERIAL	identifying line where the country appears on the list	 	city.country_id	Primary
+country	CHARACTER VARYING (50)	name of country, up to 50 characters	 	 	 
+last_update	TIMESTAMP (6) WITHOUT TIME ZONE	identifying the date and time without the time zone	 	 	 
